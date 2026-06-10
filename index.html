@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MatrixKamikaze - Blind, zero-death speedrunning challenges. Join the Hall of Fame!">
+    <meta name="keywords" content="MatrixKamikaze, speedrunning, blind runs, zero deaths, gaming">
+    <title>MatrixKamikaze</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #fff;
+            --table-border: #555;
+            --hover-bg: #2a2a2a;
+            --ad-bg: #444;
+            --input-bg: #222;
+        }
+        body.day-theme {
+            --bg-color: #f0f0f0;
+            --text-color: #000;
+            --table-border: #999;
+            --hover-bg: #e0e0e0;
+            --ad-bg: #ccc;
+            --input-bg: #ddd;
+        }
+        body.darkest-theme {
+            --bg-color: #0a0a0a;
+            --text-color: #ccc;
+            --table-border: #333;
+            --hover-bg: #1a1a1a;
+            --ad-bg: #222;
+            --input-bg: #111;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        header {
+            background: #333;
+            padding: 30px;
+            position: relative;
+            animation: fadeIn 2s ease-in;
+            height: 150px;
+        }
+        header::before {
+            content: 'Thank you everyone';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5em;
+            color: #ff6200;
+            opacity: 0.3;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px #000;
+        }
+        header::after {
+            content: 'Zero Deaths';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            color: #ff6200;
+            opacity: 0.3;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px #000;
+        }
+        header h1 { font-size: 3em; margin: 0; text-shadow: 2px 2px 4px #000; }
+        header p { font-size: 1.2em; margin: 10px 0; }
+        .donate { background: #ff6200; padding: 10px; display: inline-block; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 0 auto; }
+        .donate:hover { background: #e55b00; transition: background 0.3s; }
+        nav { background: #333; padding: 10px; display: flex; justify-content: center; align-items: center; }
+        nav a { color: #fff; margin: 0 15px; text-decoration: none; font-weight: bold; }
+        nav a:hover { color: #00ff00; transition: color 0.3s; }
+        .account-btn { background: #00ff00; padding: 8px 15px; border-radius: 5px; color: #000; font-weight: bold; }
+        .account-btn:hover { background: #00cc00; transition: background 0.3s; }
+        .content { max-width: 1000px; margin: 20px auto; padding: 20px; box-sizing: border-box; }
+        .search-sort-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .search-bar-container {
+            position: relative;
+            width: 80%;
+            max-width: 600px;
+        }
+        .search-bar {
+            width: 100%;
+            margin: 0;
+            padding: 10px;
+            border: 1px solid var(--table-border);
+            border-radius: 5px;
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+        .clear-search {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #ff6200;
+            font-size: 1.2em;
+        }
+        .search-bar:not(:placeholder-shown) + .clear-search { display: block; }
+        .scrollable-table { max-height: 500px; overflow-y: auto; overflow-x: visible; display: block; width: 100%; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        table, th, td { border: 1px solid var(--table-border); box-sizing: border-box; }
+        th, td { padding: 5px; min-width: 80px; }
+        th:nth-child(6), th:nth-child(7), td:nth-child(6), td:nth-child(7) { min-width: 120px; }
+        thead th { position: sticky; top: 0; background: var(--bg-color); z-index: 1; }
+        tr:hover { background: var(--hover-bg); transition: background 0.3s; }
+        .ad { background: var(--ad-bg); padding: 10px; margin: 10px; border-radius: 5px; }
+        form { margin: 20px 0; display: flex; flex-direction: column; align-items: center; }
+        form input, form select { margin: 10px; padding: 10px; width: 80%; max-width: 400px; border: 1px solid var(--table-border); border-radius: 5px; background: var(--input-bg); color: var(--text-color); }
+        form input[type="submit"] { background: #00ff00; color: #000; cursor: pointer; }
+        form input[type="submit"]:hover { background: #00cc00; transition: background 0.3s; }
+        .vote-btn { cursor: pointer; background: #00ff00; padding: 5px 8px; border-radius: 5px; margin: 0 2px; display: inline-block; }
+        .vote-btn:hover { background: #00cc00; transition: background 0.3s; }
+        .vote-container { display: flex; align-items: center; justify-content: center; gap: 2px; }
+        .score { position: relative; margin-right: 5px; }
+        .score:hover::after {
+            content: attr(data-breakdown);
+            position: absolute;
+            background: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            white-space: nowrap;
+        }
+        .theme-buttons { display: flex; justify-content: center; gap: 10px; margin: 10px 0; }
+        .theme-btn { padding: 8px; border-radius: 5px; background: #00ff00; color: #000; cursor: pointer; }
+        .theme-btn:hover { background: #00cc00; transition: background 0.3s; }
+        .report-btn { background: #ff6200; padding: 5px 10px; border-radius: 5px; color: #fff; }
+        .report-btn:hover { background: #e55b00; transition: background 0.3s; }
+        #notification { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: #00ff00; color: #000; padding: 10px; border-radius: 5px; display: none; }
+    </style>
+</head>
+<body class="home">
+    <header>
+        <h1>MatrixKamikaze</h1>
+        <p>Become first, fastest and best to win any fun game in a first blind run with zero deaths. You have only one life per game. <strong>Absolutely no excuses.</strong></p>
+        <a href="https://ko-fi.com" class="donate">Support the Dream!</a>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="profiles.html">Player Profiles</a>
+        <a href="events.html">Battle Royale Events</a>
+        <a href="community.html">Community</a>
+        <a href="merch.html">Merch</a>
+        <a href="sponsors.html">Sponsors</a>
+        <a href="rules.html">Rules</a>
+        <a href="auth.html">Sign In / Sign Up</a>
+        <a href="account.html" class="account-btn">My Account</a>
+        <a href="trophies.html">Trophies</a>
+    </nav>
+    <div class="content">
+        <section id="hallOfFame">
+            <h2><strong>Hall of Fame</strong></h2>
+            <p>Uncommon amongst uncommon. Best of the best.</p>
+            <div id="notification"></div>
+            <div class="search-sort-container">
+                <div class="search-bar-container">
+                    <input type="text" class="search-bar" id="searchBar" placeholder="Search by Player, Game, or Tier...">
+                    <span class="clear-search" onclick="clearSearch()">✖</span>
+                </div>
+                <select id="sortTable" onchange="sortTable()">
+                    <option value="Fastest">Sort by Fastest</option>
+                    <option value="First">Sort by First</option>
+                    <option value="Hardest">Sort by Hardest</option>
+                    <option value="Newest">Sort by Newest</option>
+                    <option value="The Best">Sort by The Best</option>
+                </select>
+            </div>
+            <div class="scrollable-table">
+                <table id="hallOfFameTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Player</th>
+                            <th>Difficulty tier</th>
+                            <th>Game</th>
+                            <th>Time</th>
+                            <th>Verify</th>
+                            <th>Acting</th>
+                            <th>Stream VOD</th>
+                            <th>Report</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <p>Show your VODs! Submit runs to join the elite.</p>
+            <button onclick="checkLogin()">Submit Run</button>
+            <p style="font-size: 0.8em;">You have to register first</p>
+            <div id="runForm" style="display: none;">
+                <form id="submitRunForm" onsubmit="submitRun(event)">
+                    <input type="text" id="player" placeholder="Player" required>
+                    <input type="text" id="game" placeholder="Game (e.g., Dark Souls)" required>
+                    <input type="text" id="time" placeholder="Time (e.g., 1h 45m)" required>
+                    <input type="text" id="tier" placeholder="Difficulty tier (e.g., SSS)" required>
+                    <input type="url" id="vod" placeholder="Twitch/YouTube VOD URL" required>
+                    <input type="url" id="playlist" placeholder="Playlist URL" required>
+                    <input type="submit" value="Submit Run">
+                </form>
+                <p id="runMessage"></p>
+            </div>
+            <div class="ad">[Ad: Gaming Gear - 300x250px]</div>
+        </section>
+    </div>
+    <footer>
+        <p>Follow <a href="#">@MatrixKamikaze</a> on X | Join <a href="#">Discord</a> | <a href="#">Privacy</a> | <a href="#">Download Our App</a></p>
+        <div class="theme-buttons">
+            <button class="theme-btn" onclick="changeTheme('day')" title="Day Theme">☀️</button>
+            <button class="theme-btn" onclick="changeTheme('moderate')" title="Moderate Theme">🌓</button>
+            <button class="theme-btn" onclick="changeTheme('darkest')" title="Darkest Night Theme">🌙</button>
+        </div>
+    </footer>
+    <script>
+        let currentRuns = [];
+
+        function initializeData() {
+            let runs = JSON.parse(localStorage.getItem('runs') || '[]');
+            if (!runs.length) {
+                runs = [
+                    { player: 'ThePrimeagen', game: 'Dark Souls', time: '1h 45m', tier: 'SSS', vod: '#', playlist: '#', date: '2025-06-25T12:00:00Z', verify: 7, verifyUp: 8, verifyDown: 1, acting: 5, actingUp: 6, actingDown: 1 },
+                    { player: 'LobosJr', game: 'Sekiro', time: '2h 10m', tier: 'SS', vod: '#', playlist: '#', date: '2025-06-26T12:00:00Z', verify: 4, verifyUp: 5, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'SquillaKilla', game: 'Elden Ring', time: '3h 20m', tier: 'S', vod: '#', playlist: '#', date: '2025-06-27T12:00:00Z', verify: 2, verifyUp: 3, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'Distortion2', game: 'Cuphead', time: '1h 30m', tier: 'S', vod: '#', playlist: '#', date: '2025-06-28T12:00:00Z', verify: 6, verifyUp: 7, verifyDown: 1, acting: 4, actingUp: 5, actingDown: 1 },
+                    { player: 'HappyHob', game: 'Bloodborne', time: '2h 50m', tier: 'SS', vod: '#', playlist: '#', date: '2025-06-24T12:00:00Z', verify: 5, verifyUp: 6, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'Zallard1', game: 'Hollow Knight', time: '2h 15m', tier: 'A', vod: '#', playlist: '#', date: '2025-06-23T12:00:00Z', verify: 3, verifyUp: 4, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'LilAggy', game: 'Dark Souls III', time: '1h 55m', tier: 'SSS', vod: '#', playlist: '#', date: '2025-06-22T12:00:00Z', verify: 8, verifyUp: 9, verifyDown: 1, acting: 6, actingUp: 7, actingDown: 1 },
+                    { player: 'CohhCarnage', game: 'Returnal', time: '3h 10m', tier: 'S', vod: '#', playlist: '#', date: '2025-06-21T12:00:00Z', verify: 4, verifyUp: 5, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'Dinossindgeil', game: 'Furi', time: '1h 40m', tier: 'A', vod: '#', playlist: '#', date: '2025-06-20T12:00:00Z', verify: 3, verifyUp: 4, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'VaatiVidya', game: 'Demon’s Souls', time: '2h 30m', tier: 'SS', vod: '#', playlist: '#', date: '2025-06-19T12:00:00Z', verify: 5, verifyUp: 6, verifyDown: 1, acting: 4, actingUp: 5, actingDown: 1 },
+                    { player: 'Elajjaz', game: 'Dead Cells', time: '1h 50m', tier: 'A', vod: '#', playlist: '#', date: '2025-06-18T12:00:00Z', verify: 4, verifyUp: 5, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'Oroboro', game: 'Dark Souls II', time: '2h 25m', tier: 'SS', vod: '#', playlist: '#', date: '2025-06-17T12:00:00Z', verify: 6, verifyUp: 7, verifyDown: 1, acting: 4, actingUp: 5, actingDown: 1 },
+                    { player: 'SunlightBlade', game: 'Celeste', time: '1h 20m', tier: 'S', vod: '#', playlist: '#', date: '2025-06-16T12:00:00Z', verify: 5, verifyUp: 6, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'FightinCowboy', game: 'Hades', time: '2h 00m', tier: 'A', vod: '#', playlist: '#', date: '2025-06-15T12:00:00Z', verify: 4, verifyUp: 5, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'MissMikkaa', game: 'Lies of P', time: '2h 45m', tier: 'SS', vod: '#', playlist: '#', date: '2025-06-14T12:00:00Z', verify: 6, verifyUp: 7, verifyDown: 1, acting: 5, actingUp: 6, actingDown: 1 },
+                    { player: 'Gothalion', game: 'Nioh', time: '3h 15m', tier: 'S', vod: '#', playlist: '#', date: '2025-06-13T12:00:00Z', verify: 3, verifyUp: 4, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'DansGaming', game: 'Sifu', time: '1h 35m', tier: 'A', vod: '#', playlist: '#', date: '2025-06-12T12:00:00Z', verify: 4, verifyUp: 5, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'Lobsterosity', game: 'Ori and the Blind Forest', time: '1h 25m', tier: 'B', vod: '#', playlist: '#', date: '2025-06-11T12:00:00Z', verify: 3, verifyUp: 4, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'Tyrannicon', game: 'Ghosts ‘n Goblins', time: '1h 10m', tier: 'SSS', vod: '#', playlist: '#', date: '2025-06-10T12:00:00Z', verify: 7, verifyUp: 8, verifyDown: 1, acting: 5, actingUp: 6, actingDown: 1 },
+                    { player: 'Zerolenny', game: 'Blasphemous', time: '2h 05m', tier: 'S', vod: '#', playlist: '#', date: '2025-06-09T12:00:00Z', verify: 4, verifyUp: 5, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'ThePrimeagen', game: 'Elden Ring', time: '3h 00m', tier: 'S', vod: '#', playlist: '#', date: '2025-06-08T12:00:00Z', verify: 5, verifyUp: 6, verifyDown: 1, acting: 4, actingUp: 5, actingDown: 1 },
+                    { player: 'LobosJr', game: 'Dark Souls', time: '2h 00m', tier: 'SSS', vod: '#', playlist: '#', date: '2025-06-07T12:00:00Z', verify: 6, verifyUp: 7, verifyDown: 1, acting: 4, actingUp: 5, actingDown: 1 },
+                    { player: 'SquillaKilla', game: 'Sekiro', time: '2h 30m', tier: 'SS', vod: '#', playlist: '#', date: '2025-06-06T12:00:00Z', verify: 3, verifyUp: 4, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'Distortion2', game: 'Bloodborne', time: '2h 40m', tier: 'SS', vod: '#', playlist: '#', date: '2025-06-05T12:00:00Z', verify: 5, verifyUp: 6, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'HappyHob', game: 'Cuphead', time: '1h 45m', tier: 'S', vod: '#', playlist: '#', date: '2025-06-04T12:00:00Z', verify: 4, verifyUp: 5, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'Zallard1', game: 'Celeste', time: '1h 15m', tier: 'S', vod: '#', playlist: '#', date: '2025-06-03T12:00:00Z', verify: 4, verifyUp: 5, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'LilAggy', game: 'Hollow Knight', time: '2h 20m', tier: 'A', vod: '#', playlist: '#', date: '2025-06-02T12:00:00Z', verify: 3, verifyUp: 4, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'CohhCarnage', game: 'Hades', time: '2h 10m', tier: 'A', vod: '#', playlist: '#', date: '2025-06-01T12:00:00Z', verify: 4, verifyUp: 5, verifyDown: 1, acting: 3, actingUp: 4, actingDown: 1 },
+                    { player: 'Dinossindgeil', game: 'Dead Cells', time: '1h 55m', tier: 'A', vod: '#', playlist: '#', date: '2025-05-31T12:00:00Z', verify: 3, verifyUp: 4, verifyDown: 1, acting: 2, actingUp: 3, actingDown: 1 },
+                    { player: 'VaatiVidya', game: 'Dark Souls II', time: '2h 35m', tier: 'SS', vod: '#', playlist: '#', date: '2025-05-30T12:00:00Z', verify: 5, verifyUp: 6, verifyDown: 1, acting: 4, actingUp: 5, actingDown: 1 }
+                ];
+                console.log('Initializing 30 runs:', runs.length);
+                localStorage.setItem('runs', JSON.stringify(runs));
+            }
+            console.log('Loaded runs from storage:', runs.length);
+            currentRuns = runs;
+            loadTable(runs);
+        }
+
+        function loadTable(runs) {
+            console.log('Loading table with runs:', runs.length);
+            let table = document.getElementById('hallOfFameTable').tBodies[0];
+            table.innerHTML = '';
+            runs.forEach(run => {
+                let row = table.insertRow(-1);
+                row.innerHTML = `
+                    <td>${new Date(run.date).toLocaleDateString('en-GB')}</td>
+                    <td><a href="profiles.html#${encodeURIComponent(run.player)}">${run.player}</a></td>
+                    <td>${run.tier}</td>
+                    <td>${run.game}</td>
+                    <td>${run.time}</td>
+                    <td><span class="score" data-breakdown="+${run.verify} [${run.verifyUp} up, ${run.verifyDown} down]">+${run.verify}</span> <div class="vote-container"><button class="vote-btn" onclick="vote('${run.player}_${run.game}', 'verify', 1)">+1</button><button class="vote-btn" onclick="vote('${run.player}_${run.game}', 'verify', -1)">-1</button></div></td>
+                    <td><span class="score" data-breakdown="+${run.acting} [${run.actingUp} up, ${run.actingDown} down]">+${run.acting}</span> <div class="vote-container"><button class="vote-btn" onclick="vote('${run.player}_${run.game}', 'acting', 1)">+1</button><button class="vote-btn" onclick="vote('${run.player}_${run.game}', 'acting', -1)">-1</button></div></td>
+                    <td><a href="${run.vod}">VOD</a></td>
+                    <td><button class="report-btn" onclick="reportRun('${run.player}_${run.game}')">Report</button></td>
+                `;
+            });
+        }
+
+        function changeTheme(theme) {
+            document.body.className = theme + '-theme';
+            localStorage.setItem('theme', theme);
+        }
+
+        function clearSearch() {
+            document.getElementById('searchBar').value = '';
+            document.getElementById('searchBar').dispatchEvent(new Event('input'));
+        }
+
+        function vote(id, type, value) {
+            let user = localStorage.getItem('user');
+            if (user) {
+                let runs = JSON.parse(localStorage.getItem('runs') || '[]');
+                let run = runs.find(r => `${r.player}_${r.game}` === id);
+                if (run) {
+                    run[type] += value;
+                    run[type + (value > 0 ? 'Up' : 'Down')] += 1;
+                    localStorage.setItem('runs', JSON.stringify(runs));
+                    currentRuns = runs;
+                    loadTable(runs);
+                    let notification = document.getElementById('notification');
+                    notification.textContent = `Voted ${value > 0 ? '+1' : '-1'} on ${type}!`;
+                    notification.style.display = 'block';
+                    setTimeout(() => notification.style.display = 'none', 2000);
+                }
+            } else {
+                window.location.href = 'auth.html';
+            }
+        }
+
+        function reportRun(id) {
+            if (!localStorage.getItem('user')) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            let reports = JSON.parse(localStorage.getItem('reports') || '[]');
+            reports.push({ id, date: new Date().toISOString() });
+            localStorage.setItem('reports', JSON.stringify(reports));
+            let notification = document.getElementById('notification');
+            notification.textContent = 'Run reported successfully!';
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000);
+        }
+
+        function submitRun(event) {
+            event.preventDefault();
+            let player = document.getElementById('player').value;
+            let game = document.getElementById('game').value;
+            let time = document.getElementById('time').value;
+            let tier = document.getElementById('tier').value;
+            let vod = document.getElementById('vod').value;
+            let playlist = document.getElementById('playlist').value;
+            let runs = JSON.parse(localStorage.getItem('runs') || '[]');
+            runs.push({
+                player,
+                game,
+                time,
+                tier,
+                vod,
+                playlist,
+                date: new Date().toISOString(),
+                verify: 0,
+                verifyUp: 0,
+                verifyDown: 0,
+                acting: 0,
+                actingUp: 0,
+                actingDown: 0
+            });
+            localStorage.setItem('runs', JSON.stringify(runs));
+            currentRuns = runs;
+            document.getElementById('runForm').style.display = 'none';
+            document.getElementById('runMessage').textContent = 'Run submitted successfully!';
+            setTimeout(() => document.getElementById('runMessage').textContent = '', 3000);
+            loadTable(runs);
+        }
+
+        function sortTable() {
+            let sortType = document.getElementById('sortTable').value;
+            let sortedRuns = [...currentRuns];
+            if (sortType === 'Fastest') {
+                sortedRuns.sort((a, b) => parseTime(a.time) - parseTime(b.time));
+            } else if (sortType === 'First') {
+                sortedRuns.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (sortType === 'Hardest') {
+                const tierOrder = ['SSS', 'SS', 'S', 'A', 'B', 'C', 'D', 'E', 'F'];
+                sortedRuns.sort((a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier));
+            } else if (sortType === 'Newest') {
+                sortedRuns.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (sortType === 'The Best') {
+                sortedRuns.sort((a, b) => b.verify - a.verify);
+            }
+            currentRuns = sortedRuns;
+            loadTable(sortedRuns);
+        }
+
+        function parseTime(time) {
+            let [hours, minutes] = time.split('h ').map(t => parseInt(t) || 0);
+            return hours * 60 + minutes;
+        }
+
+        document.getElementById('searchBar').addEventListener('input', function() {
+            let query = this.value.toLowerCase();
+            let runs = JSON.parse(localStorage.getItem('runs') || '[]');
+            let filteredRuns = runs.filter(run =>
+                run.player.toLowerCase().includes(query) ||
+                run.game.toLowerCase().includes(query) ||
+                run.tier.toLowerCase().includes(query)
+            );
+            currentRuns = filteredRuns;
+            loadTable(filteredRuns);
+        });
+
+        window.onload = function() {
+            let savedTheme = localStorage.getItem('theme') || 'moderate';
+            document.body.className = savedTheme + '-theme';
+            let user = localStorage.getItem('user');
+            if (user) {
+                document.getElementById('player').value = user;
+            } else if (window.location.pathname === '/index.html') {
+                localStorage.removeItem('user');
+            }
+            initializeData();
+            let urlParams = new URLSearchParams(window.location.search);
+            let playerFilter = urlParams.get('player');
+            if (playerFilter) {
+                document.getElementById('searchBar').value = decodeURIComponent(playerFilter);
+                document.getElementById('searchBar').dispatchEvent(new Event('input'));
+            }
+        };
+
+        function checkLogin() {
+            if (!localStorage.getItem('user')) {
+                window.location.href = 'auth.html';
+            } else {
+                document.getElementById('runForm').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

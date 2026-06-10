@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - MatrixKamikaze</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #fff;
+            --table-border: #555;
+            --hover-bg: #2a2a2a;
+            --ad-bg: #444;
+            --input-bg: #222;
+        }
+        body.day-theme {
+            --bg-color: #f0f0f0;
+            --text-color: #000;
+            --table-border: #999;
+            --hover-bg: #e0e0e0;
+            --ad-bg: #ccc;
+            --input-bg: #ddd;
+        }
+        body.darkest-theme {
+            --bg-color: #0a0a0a;
+            --text-color: #ccc;
+            --table-border: #333;
+            --hover-bg: #1a1a1a;
+            --ad-bg: #222;
+            --input-bg: #111;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            text-align: center;
+        }
+        header {
+            background: url('https://via.placeholder.com/1200x150?text=Zero+Deaths') no-repeat center;
+            background-size: cover;
+            padding: 30px;
+            position: relative;
+            animation: fadeIn 2s ease-in;
+            height: 150px;
+        }
+        header::before {
+            content: 'Let\'s be friends!';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5em;
+            color: #ff6200;
+            opacity: 0.3;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px #000;
+        }
+        header::after {
+            content: 'We love your enthusiasm!';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            color: #ff6200;
+            opacity: 0.3;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px #000;
+        }
+        header h1 { font-size: 3em; margin: 0; text-shadow: 2px 2px 4px #000; }
+        header p { font-size: 1.2em; margin: 10px 0; }
+        nav { background: #333; padding: 10px; display: flex; justify-content: center; align-items: center; }
+        nav a { color: #fff; margin: 0 15px; text-decoration: none; font-weight: bold; }
+        nav a:hover { color: #00ff00; transition: color 0.3s; }
+        .account-btn { background: #00ff00; padding: 8px 15px; border-radius: 5px; color: #000; font-weight: bold; }
+        .account-btn:hover { background: #00cc00; transition: background 0.3s; }
+        .content { max-width: 800px; margin: 20px auto; padding: 20px; }
+        .scrollable-table { max-height: 300px; overflow-y: auto; display: block; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; }
+        table, th, td { border: 1px solid var(--table-border); }
+        th, td { padding: 10px; }
+        tr:hover { background: var(--hover-bg); transition: background 0.3s; }
+        .ad { background: var(--ad-bg); padding: 10px; margin: 10px; border-radius: 5px; }
+        .donate { background: #ff6200; padding: 10px; display: inline-block; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .donate:hover { background: #e55b00; transition: background 0.3s; }
+        form { margin: 20px 0; display: flex; flex-direction: column; align-items: center; }
+        form input, form textarea { margin: 10px; padding: 10px; width: 80%; max-width: 400px; border: 1px solid var(--table-border); border-radius: 5px; background: var(--input-bg); color: var(--text-color); }
+        form input[type="submit"] { background: #00ff00; color: #000; cursor: pointer; }
+        form input[type="submit"]:hover { background: #00cc00; transition: background 0.3s; }
+        #themeToggle { margin: 10px; padding: 8px; border-radius: 5px; background: #00ff00; color: #000; }
+    </style>
+</head>
+<body class="community">
+    <header>
+        <h1>MatrixKamikaze</h1>
+        <p>Be the first and fastest to complete each game blind with zero deaths with one life/game.</p>
+        <a href="https://ko-fi.com" class="donate">Support the Dream!</a>
+        <select id="themeToggle" onchange="changeTheme()">
+            <option value="moderate">Moderate Theme</option>
+            <option value="day">Day Theme</option>
+            <option value="darkest">Darkest Night Theme</option>
+        </select>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="profiles.html">Player Profiles</a>
+        <a href="events.html">Battle Royale Events</a>
+        <a href="community.html">Community</a>
+        <a href="merch.html">Merch</a>
+        <a href="sponsors.html">Sponsors</a>
+        <a href="rules.html">Rules</a>
+        <a href="auth.html">Sign In / Sign Up</a>
+        <a href="account.html" class="account-btn">My Account</a>
+    </nav>
+    <div class="content">
+        <section id="community">
+            <h2>Community</h2>
+            <p>Join the #MatrixKamikaze community!</p>
+            <p><a href="#">Join our Discord server</a> for run discussions and VOD reviews!</p>
+            <p><a href="#">Follow @MatrixKamikaze on X</a> for challenges and highlights!</p>
+            <p>Streamer Spotlight: <a href="profiles.html#ThePrimeagen">ThePrimeagen crushed *Dark Souls* blind!</a></p>
+            <h3>Game Tier List Voting</h3>
+            <form id="tierVoteForm" onsubmit="submitTierVote(event)">
+                <input type="text" id="gameName" placeholder="Game (e.g., Dark Souls)" required>
+                <select id="tier" required>
+                    <option value="">Select Tier</option>
+                    <option value="SSS+">SSS+</option>
+                    <option value="SSS">SSS</option>
+                    <option value="SS">SS</option>
+                    <option value="S">S</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                </select>
+                <input type="submit" value="Submit Tier Vote">
+            </form>
+            <p id="tierVoteMessage"></p>
+            <h3>Current Tier List</h3>
+            <div class="scrollable-table">
+                <table id="tierListTable">
+                    <tr>
+                        <th>Game</th>
+                        <th>Tier</th>
+                        <th>Votes</th>
+                    </tr>
+                    <tr>
+                        <td>Dark Souls</td>
+                        <td>SSS</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>Sekiro</td>
+                        <td>SS</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>Cuphead</td>
+                        <td>S</td>
+                        <td>7</td>
+                    </tr>
+                </table>
+            </div>
+            <h3>Best Failed Runs</h3>
+            <div class="scrollable-table">
+                <table id="failedRunsTable">
+                    <tr>
+                        <th>Streamer</th>
+                        <th>Game</th>
+                        <th>Stream VOD</th>
+                    </tr>
+                    <tr>
+                        <td><a href="profiles.html#NeoGamer">NeoGamer</a></td>
+                        <td>Sekiro</td>
+                        <td><a href="#">Twitch</a></td>
+                    </tr>
+                </table>
+            </div>
+            <h3>Submit a Failed Run</h3>
+            <form id="failedRunForm" onsubmit="submitFailedRun(event)">
+                <input type="text" id="failedStreamer" placeholder="Streamer Name" required>
+                <input type="text" id="failedGame" placeholder="Game (e.g., Sekiro)" required>
+                <input type="url" id="failedVod" placeholder="Twitch/YouTube VOD URL" required>
+                <input type="submit" value="Submit Failed Run">
+            </form>
+            <p id="failedRunMessage"></p>
+            <div class="ad">[Ad: Gaming Gear - 300x250px]</div>
+        </section>
+    </div>
+    <footer>
+        <p>Follow <a href="#">@MatrixKamikaze</a> on X | Join <a href="#">Discord</a> | <a href="#">Privacy</a> | <a href="#">Download Our App</a></p>
+    </footer>
+    <script>
+        function changeTheme() {
+            let theme = document.getElementById('themeToggle').value;
+            document.body.className = theme + '-theme';
+            localStorage.setItem('theme', theme);
+        }
+        window.onload = function() {
+            let savedTheme = localStorage.getItem('theme') || 'moderate';
+            document.body.className = savedTheme + '-theme';
+            document.getElementById('themeToggle').value = savedTheme;
+        };
+        function submitTierVote(event) {
+            event.preventDefault();
+            let game = document.getElementById('gameName').value;
+            let tier = document.getElementById('tier').value;
+            let table = document.getElementById('tierListTable');
+            let rows = table.getElementsByTagName('tr');
+            let exists = false;
+            for (let i = 1; i < rows.length; i++) {
+                if (rows[i].cells[0].textContent === game) {
+                    let votes = parseInt(rows[i].cells[2].textContent) + 1;
+                    rows[i].cells[1].textContent = tier;
+                    rows[i].cells[2].textContent = votes;
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                let row = table.insertRow(-1);
+                row.innerHTML = `<td>${game}</td><td>${tier}</td><td>1</td>`;
+            }
+            document.getElementById('tierVoteMessage').textContent = `Voted ${tier} for ${game}!`;
+            document.getElementById('tierVoteForm').reset();
+            let votes = JSON.parse(localStorage.getItem('tierVotes') || '[]');
+            votes.push({ game, tier, date: new Date().toLocaleDateString() });
+            localStorage.setItem('tierVotes', JSON.stringify(votes));
+        }
+        function submitFailedRun(event) {
+            event.preventDefault();
+            let streamer = document.getElementById('failedStreamer').value;
+            let game = document.getElementById('failedGame').value;
+            let vod = document.getElementById('failedVod').value;
+            let table = document.getElementById('failedRunsTable');
+            let row = table.insertRow(-1);
+            row.innerHTML = `<td><a href="profiles.html#${streamer}">${streamer}</a></td><td>${game}</td><td><a href="${vod}">VOD</a></td>`;
+            document.getElementById('failedRunMessage').textContent = `Failed run by ${streamer} for ${game} added!`;
+            document.getElementById('failedRunForm').reset();
+            let failedRuns = JSON.parse(localStorage.getItem('failedRuns') || '[]');
+            failedRuns.push({ streamer, game, vod, date: new Date().toLocaleDateString() });
+            localStorage.setItem('failedRuns', JSON.stringify(failedRuns));
+        }
+    </script>
+</body>
+</html>

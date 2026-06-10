@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MatrixKamikaze - Player Profiles for Blind Speedrunning Challenges">
+    <meta name="keywords" content="MatrixKamikaze, player profiles, speedrunning, blind runs">
+    <title>MatrixKamikaze - Player Profiles</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #fff;
+            --table-border: #555;
+            --hover-bg: #2a2a2a;
+            --ad-bg: #444;
+            --input-bg: #222;
+        }
+        body.day-theme {
+            --bg-color: #f0f0f0;
+            --text-color: #000;
+            --table-border: #999;
+            --hover-bg: #e0e0e0;
+            --ad-bg: #ccc;
+            --input-bg: #ddd;
+        }
+        body.darkest-theme {
+            --bg-color: #0a0a0a;
+            --text-color: #ccc;
+            --table-border: #333;
+            --hover-bg: #1a1a1a;
+            --ad-bg: #222;
+            --input-bg: #111;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        header {
+            background: #333;
+            padding: 30px;
+            position: relative;
+            height: 150px;
+        }
+        header::before {
+            content: 'Thank you everyone';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5em;
+            color: #ff6200;
+            opacity: 0.3;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px #000;
+        }
+        header::after {
+            content: 'Zero Deaths';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            color: #ff6200;
+            opacity: 0.3;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px #000;
+        }
+        header h1 { font-size: 3em; margin: 0; text-shadow: 2px 2px 4px #000; }
+        .donate { background: #ff6200; padding: 10px; display: inline-block; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 0 auto; }
+        .donate:hover { background: #e55b00; transition: background 0.3s; }
+        nav { background: #333; padding: 10px; display: flex; justify-content: center; align-items: center; }
+        nav a { color: #fff; margin: 0 15px; text-decoration: none; font-weight: bold; }
+        nav a:hover { color: #00ff00; transition: color 0.3s; }
+        .account-btn { background: #00ff00; padding: 8px 15px; border-radius: 5px; color: #000; font-weight: bold; }
+        .account-btn:hover { background: #00cc00; transition: background 0.3s; }
+        .content { max-width: 1000px; margin: 20px auto; padding: 20px; box-sizing: border-box; }
+        .search-bar-container {
+            position: relative;
+            width: 80%;
+            max-width: 600px;
+            margin: 10px auto;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--table-border);
+            border-radius: 5px;
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+        .clear-search {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #ff6200;
+            font-size: 1.2em;
+        }
+        .search-bar:not(:placeholder-shown) + .clear-search { display: block; }
+        .scrollable-table { max-height: 500px; overflow-y: auto; overflow-x: visible; display: block; width: 100%; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        table, th, td { border: 1px solid var(--table-border); box-sizing: border-box; }
+        th, td { padding: 5px; min-width: 80px; }
+        tr:hover { background: var(--hover-bg); transition: background 0.3s; }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+            background: #00ff00;
+            color: #000;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .dropbtn:hover { background: #00cc00; transition: background 0.3s; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: #2a2a2a;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        .dropdown-content table { border: none; width: 100%; }
+        .dropdown-content th, .dropdown-content td { border: none; padding: 5px; }
+        .dropdown-content tr:hover { background: #333; }
+        .dropdown:hover .dropdown-content { display: block; }
+        .trophy-btn {
+            background: #00ff00;
+            color: #000;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .trophy-btn:hover { background: #00cc00; transition: background 0.3s; }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-color);
+            padding: 20px;
+            border: 1px solid var(--table-border);
+            border-radius: 5px;
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .popup-content {
+            text-align: left;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #ff6200;
+        }
+        .ad { background: var(--ad-bg); padding: 10px; margin: 10px; border-radius: 5px; }
+        .theme-buttons { display: flex; justify-content: center; gap: 10px; margin: 10px 0; }
+        .theme-btn { padding: 8px; border-radius: 5px; background: #00ff00; color: #000; cursor: pointer; }
+        .theme-btn:hover { background: #00cc00; transition: background 0.3s; }
+    </style>
+</head>
+<body class="profiles">
+    <header>
+        <h1>MatrixKamikaze</h1>
+        <a href="https://ko-fi.com" class="donate">Support the Dream!</a>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="profiles.html">Player Profiles</a>
+        <a href="events.html">Battle Royale Events</a>
+        <a href="community.html">Community</a>
+        <a href="merch.html">Merch</a>
+        <a href="sponsors.html">Sponsors</a>
+        <a href="rules.html">Rules</a>
+        <a href="auth.html">Sign In / Sign Up</a>
+        <a href="account.html" class="account-btn">My Account</a>
+        <a href="trophies.html">Trophies</a>
+    </nav>
+    <div class="content">
+        <h2>Player Profiles</h2>
+        <p>Meet the legends of MatrixKamikaze.</p>
+        <div class="search-bar-container">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Search by Player Name...">
+            <span class="clear-search" onclick="clearSearch()">✖</span>
+        </div>
+        <div class="scrollable-table">
+            <table id="profileTable">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Runs</th>
+                        <th>Acting Score</th>
+                        <th>Fastest Wins</th>
+                        <th>First Wins</th>
+                        <th>Top 3 Rivals</th>
+                        <th>Show Trophies</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="ad">[Ad: Gaming Gear - 300x250px]</div>
+    </div>
+    <footer>
+        <p>Follow <a href="#">@MatrixKamikaze</a> on X | Join <a href="#">Discord</a> | <a href="#">Privacy</a> | <a href="#">Download Our App</a></p>
+        <div class="theme-buttons">
+            <button class="theme-btn" onclick="changeTheme('day')" title="Day Theme">☀️</button>
+            <button class="theme-btn" onclick="changeTheme('moderate')" title="Moderate Theme">🌓</button>
+            <button class="theme-btn" onclick="changeTheme('darkest')" title="Darkest Night Theme">🌙</button>
+        </div>
+    </footer>
+    <div id="trophyPopup" class="popup">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <div class="popup-content" id="trophyContent"></div>
+    </div>
+    <script>
+        let profiles = [
+            { name: 'ThePrimeagen', runs: 5, actingScore: 0, fastestWins: 0, firstWins: 0 },
+            { name: 'LobosJr', runs: 4, actingScore: 0, fastestWins: 0, firstWins: 0 },
+            { name: 'SquillaKilla', runs: 3, actingScore: 0, fastestWins: 0, firstWins: 0 },
+            { name: 'Distortion2', runs: 6, actingScore: 0, fastestWins: 0, firstWins: 0 },
+            { name: 'HappyHob', runs: 5, actingScore: 0, fastestWins: 0, firstWins: 0 }
+        ];
+
+        function loadProfiles() {
+            let runs = JSON.parse(localStorage.getItem('runs') || '[]');
+            profiles.forEach(profile => {
+                let playerRuns = runs.filter(run => run.player === profile.name);
+                profile.actingScore = playerRuns.reduce((sum, run) => sum + run.acting, 0) / (playerRuns.length || 1);
+                profile.fastestWins = playerRuns.filter(run => {
+                    let sameGameRuns = runs.filter(r => r.game === run.game);
+                    return sameGameRuns.length > 0 && sameGameRuns.every(r => parseTime(r.time) >= parseTime(run.time));
+                }).length;
+                profile.firstWins = playerRuns.filter(run => {
+                    let sameGameRuns = runs.filter(r => r.game === run.game);
+                    return sameGameRuns.length > 0 && sameGameRuns.every(r => new Date(r.date) >= new Date(run.date));
+                }).length;
+                profile.runs = playerRuns.length;
+
+                // Calculate top 3 rivals based on run count and acting score similarity
+                let rivals = profiles.filter(p => p.name !== profile.name).map(rival => ({
+                    name: rival.name,
+                    similarity: Math.abs(rival.runs - profile.runs) + Math.abs(rival.actingScore - profile.actingScore)
+                })).sort((a, b) => a.similarity - b.similarity).slice(0, 3);
+                profile.rivals = rivals.map(r => r.name).join(', ');
+            });
+
+            let table = document.getElementById('profileTable').tBodies[0];
+            table.innerHTML = '';
+            profiles.forEach(profile => {
+                let row = table.insertRow(-1);
+                row.innerHTML = `
+                    <td><div class="dropdown">
+                        <button class="dropbtn">${profile.name}</button>
+                        <div class="dropdown-content">
+                            <table>
+                                <thead><tr><th>Game</th><th>Time</th><th>Date</th></tr></thead>
+                                <tbody>
+                                    ${runs.filter(run => run.player === profile.name).map(run => `
+                                        <tr>
+                                            <td>${run.game}</td>
+                                            <td>${run.time}</td>
+                                            <td>${new Date(run.date).toLocaleDateString('en-GB')}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div></td>
+                    <td>${profile.runs}</td>
+                    <td>${profile.actingScore.toFixed(1)}</td>
+                    <td>${profile.fastestWins}</td>
+                    <td>${profile.firstWins}</td>
+                    <td>${profile.rivals || 'None'}</td>
+                    <td><button class="trophy-btn" onclick="showTrophies('${profile.name}')">Show Trophies</button></td>
+                `;
+            });
+        }
+
+        function changeTheme(theme) {
+            document.body.className = theme + '-theme';
+            localStorage.setItem('theme', theme);
+        }
+
+        function clearSearch() {
+            document.getElementById('searchBar').value = '';
+            document.getElementById('searchBar').dispatchEvent(new Event('input'));
+        }
+
+        function parseTime(time) {
+            let [hours, minutes] = time.split('h ').map(t => parseInt(t) || 0);
+            return hours * 60 + minutes;
+        }
+
+        function showTrophies(playerName) {
+            let trophies = JSON.parse(localStorage.getItem('trophies') || '[]');
+            let playerTrophies = trophies.filter(t => t.recipient === playerName && !t.hidden);
+            let content = playerTrophies.map(t => `
+                <div>
+                    <img src="${t.drawing}" width="50" height="50">
+                    <p>${t.type.toUpperCase()}: ${t.name} (from ${t.giver}, ${new Date(t.date).toLocaleDateString('en-GB')})</p>
+                </div>
+            `).join('<br>');
+            if (!content) content = '<p>No trophies to show.</p>';
+            document.getElementById('trophyContent').innerHTML = content;
+            document.getElementById('trophyPopup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('trophyPopup').style.display = 'none';
+        }
+
+        document.getElementById('searchBar').addEventListener('input', function() {
+            let query = this.value.toLowerCase();
+            let filteredProfiles = profiles.filter(profile =>
+                profile.name.toLowerCase().includes(query)
+            );
+            let table = document.getElementById('profileTable').tBodies[0];
+            table.innerHTML = '';
+            filteredProfiles.forEach(profile => {
+                let row = table.insertRow(-1);
+                row.innerHTML = `
+                    <td><div class="dropdown">
+                        <button class="dropbtn">${profile.name}</button>
+                        <div class="dropdown-content">
+                            <table>
+                                <thead><tr><th>Game</th><th>Time</th><th>Date</th></tr></thead>
+                                <tbody>
+                                    ${JSON.parse(localStorage.getItem('runs') || '[]').filter(run => run.player === profile.name).map(run => `
+                                        <tr>
+                                            <td>${run.game}</td>
+                                            <td>${run.time}</td>
+                                            <td>${new Date(run.date).toLocaleDateString('en-GB')}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div></td>
+                    <td>${profile.runs}</td>
+                    <td>${profile.actingScore.toFixed(1)}</td>
+                    <td>${profile.fastestWins}</td>
+                    <td>${profile.firstWins}</td>
+                    <td>${profile.rivals || 'None'}</td>
+                    <td><button class="trophy-btn" onclick="showTrophies('${profile.name}')">Show Trophies</button></td>
+                `;
+            });
+        });
+
+        window.onload = function() {
+            let savedTheme = localStorage.getItem('theme') || 'moderate';
+            document.body.className = savedTheme + '-theme';
+            loadProfiles();
+            let urlParams = new URLSearchParams(window.location.search);
+            let player = urlParams.get('player');
+            if (player) {
+                let profile = profiles.find(p => p.name === decodeURIComponent(player));
+                if (profile) {
+                    let table = document.getElementById('profileTable').tBodies[0];
+                    table.innerHTML = `
+                        <tr>
+                            <td><div class="dropdown">
+                                <button class="dropbtn">${profile.name}</button>
+                                <div class="dropdown-content">
+                                    <table>
+                                        <thead><tr><th>Game</th><th>Time</th><th>Date</th></tr></thead>
+                                        <tbody>
+                                            ${JSON.parse(localStorage.getItem('runs') || '[]').filter(run => run.player === profile.name).map(run => `
+                                                <tr>
+                                                    <td>${run.game}</td>
+                                                    <td>${run.time}</td>
+                                                    <td>${new Date(run.date).toLocaleDateString('en-GB')}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div></td>
+                            <td>${profile.runs}</td>
+                            <td>${profile.actingScore.toFixed(1)}</td>
+                            <td>${profile.fastestWins}</td>
+                            <td>${profile.firstWins}</td>
+                            <td>${profile.rivals || 'None'}</td>
+                            <td><button class="trophy-btn" onclick="showTrophies('${profile.name}')">Show Trophies</button></td>
+                        </tr>
+                    `;
+                }
+            }
+        };
+    </script>
+</body>
+</html>

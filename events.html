@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Royale Events - MatrixKamikaze</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #fff;
+            --table-border: #555;
+            --hover-bg: #2a2a2a;
+            --ad-bg: #444;
+            --input-bg: #222;
+        }
+        body.day-theme {
+            --bg-color: #f0f0f0;
+            --text-color: #000;
+            --table-border: #999;
+            --hover-bg: #e0e0e0;
+            --ad-bg: #ccc;
+            --input-bg: #ddd;
+        }
+        body.darkest-theme {
+            --bg-color: #0a0a0a;
+            --text-color: #ccc;
+            --table-border: #333;
+            --hover-bg: #1a1a1a;
+            --ad-bg: #222;
+            --input-bg: #111;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            text-align: center;
+        }
+        header {
+            background: url('https://via.placeholder.com/1200x150?text=Zero+Deaths') no-repeat center;
+            background-size: cover;
+            padding: 30px;
+            position: relative;
+            animation: fadeIn 2s ease-in;
+            height: 150px;
+        }
+        header::before {
+            content: 'Winner, winners';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5em;
+            color: #ff6200;
+            opacity: 0.3;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px #000;
+        }
+        header::after {
+            content: 'Win or be the last survivor';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            color: #ff6200;
+            opacity: 0.3;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px #000;
+        }
+        header h1 { font-size: 3em; margin: 0; text-shadow: 2px 2px 4px #000; }
+        header p { font-size: 1.2em; margin: 10px 0; }
+        nav { background: #333; padding: 10px; display: flex; justify-content: center; align-items: center; }
+        nav a { color: #fff; margin: 0 15px; text-decoration: none; font-weight: bold; }
+        nav a:hover { color: #00ff00; transition: color 0.3s; }
+        .account-btn { background: #00ff00; padding: 8px 15px; border-radius: 5px; color: #000; font-weight: bold; }
+        .account-btn:hover { background: #00cc00; transition: background 0.3s; }
+        .content { max-width: 800px; margin: 20px auto; padding: 20px; }
+        .scrollable-table { max-height: 300px; overflow-y: auto; display: block; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; }
+        table, th, td { border: 1px solid var(--table-border); }
+        th, td { padding: 10px; }
+        tr:hover { background: var(--hover-bg); transition: background 0.3s; }
+        .ad { background: var(--ad-bg); padding: 10px; margin: 10px; border-radius: 5px; }
+        .donate { background: #ff6200; padding: 10px; display: inline-block; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .donate:hover { background: #e55b00; transition: background 0.3s; }
+        form { margin: 20px 0; display: flex; flex-direction: column; align-items: center; }
+        form input, form textarea { margin: 10px; padding: 10px; width: 80%; max-width: 400px; border: 1px solid var(--table-border); border-radius: 5px; background: var(--input-bg); color: var(--text-color); }
+        form input[type="submit"] { background: #00ff00; color: #000; cursor: pointer; }
+        form input[type="submit"]:hover { background: #00cc00; transition: background 0.3s; }
+        #searchUpcoming, #searchHistory, #searchCurrent { margin: 20px; padding: 10px; width: 70%; }
+        #themeToggle { margin: 10px; padding: 8px; border-radius: 5px; background: #00ff00; color: #000; }
+    </style>
+</head>
+<body class="events">
+    <header>
+        <h1>MatrixKamikaze</h1>
+        <p>Be the first and fastest to complete each game blind with zero deaths with one life/game.</p>
+        <a href="https://ko-fi.com" class="donate">Support the Dream!</a>
+        <select id="themeToggle" onchange="changeTheme()">
+            <option value="moderate">Moderate Theme</option>
+            <option value="day">Day Theme</option>
+            <option value="darkest">Darkest Night Theme</option>
+        </select>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="profiles.html">Player Profiles</a>
+        <a href="events.html">Battle Royale Events</a>
+        <a href="community.html">Community</a>
+        <a href="merch.html">Merch</a>
+        <a href="sponsors.html">Sponsors</a>
+        <a href="rules.html">Rules</a>
+        <a href="auth.html">Sign In / Sign Up</a>
+        <a href="account.html" class="account-btn">My Account</a>
+    </nav>
+    <div class="content">
+        <section id="events">
+            <h2>Battle Royale Events</h2>
+            <p>Watch streamers battle blind in fun to watch games! Who dies first? Who wins first?</p>
+            <h3>Current Events</h3>
+            <input type="text" id="searchCurrent" placeholder="Search by date, game, or participants" onkeyup="searchTable('currentEventsTable')">
+            <div class="scrollable-table">
+                <table id="currentEventsTable">
+                    <tr>
+                        <th>Date</th>
+                        <th>Game</th>
+                        <th>Participants</th>
+                        <th>Stream Link</th>
+                    </tr>
+                    <tr>
+                        <td>6/27/25</td>
+                        <td>Cuphead</td>
+                        <td>CodeBullet, NeoGamer, LobosJr</td>
+                        <td><a href="#">Twitch</a></td>
+                    </tr>
+                </table>
+            </div>
+            <h3>Upcoming Events</h3>
+            <input type="text" id="searchUpcoming" placeholder="Search by date, game, or participants" onkeyup="searchTable('upcomingEventsTable')">
+            <div class="scrollable-table">
+                <table id="upcomingEventsTable">
+                    <tr>
+                        <th>Date</th>
+                        <th>Game</th>
+                        <th>Participants</th>
+                        <th>Stream Link</th>
+                    </tr>
+                    <tr>
+                        <td>7/1/25</td>
+                        <td>Sekiro</td>
+                        <td>ThePrimeagen, LobosJr</td>
+                        <td><a href="#">TBA</a></td>
+                    </tr>
+                </table>
+            </div>
+            <h3>Submit an Event</h3>
+            <form id="eventSubmissionForm" onsubmit="submitEvent(event)">
+                <input type="text" id="eventName" placeholder="Event Name (e.g., Dark Souls Royale)" required>
+                <input type="date" id="eventDate" required>
+                <input type="text" id="eventGame" placeholder="Game (e.g., Sifu)" required>
+                <textarea id="eventDetails" placeholder="Event details (e.g., participants, rules)" rows="4"></textarea>
+                <input type="submit" value="Submit Event">
+            </form>
+            <p id="eventSubmissionMessage"></p>
+            <h3>Event History</h3>
+            <input type="text" id="searchHistory" placeholder="Search by date, game, participants, or winner" onkeyup="searchTable('eventHistoryTable')">
+            <div class="scrollable-table">
+                <table id="eventHistoryTable">
+                    <tr>
+                        <th>Date</th>
+                        <th>Game</th>
+                        <th>Participants</th>
+                        <th>Winner</th>
+                        <th>Stream VOD</th>
+                    </tr>
+                    <tr>
+                        <td>6/20/25</td>
+                        <td>DOOM Eternal</td>
+                        <td>ThePrimeagen, CodeBullet</td>
+                        <td>ThePrimeagen</td>
+                        <td><a href="#">Twitch</a></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ad">[Ad: Game Trailer - 728x90px]</div>
+        </section>
+    </div>
+    <footer>
+        <p>Follow <a href="#">@MatrixKamikaze</a> on X | Join <a href="#">Discord</a> | <a href="#">Privacy</a> | <a href="#">Download Our App</a></p>
+    </footer>
+    <script>
+        function changeTheme() {
+            let theme = document.getElementById('themeToggle').value;
+            document.body.className = theme + '-theme';
+            localStorage.setItem('theme', theme);
+        }
+        window.onload = function() {
+            let savedTheme = localStorage.getItem('theme') || 'moderate';
+            document.body.className = savedTheme + '-theme';
+            document.getElementById('themeToggle').value = savedTheme;
+        };
+        function searchTable(tableId) {
+            let inputId = tableId === 'upcomingEventsTable' ? 'searchUpcoming' :
+                          tableId === 'currentEventsTable' ? 'searchCurrent' : 'searchHistory';
+            let input = document.getElementById(inputId).value.toLowerCase();
+            let table = document.getElementById(tableId);
+            let rows = table.getElementsByTagName('tr');
+            for (let i = 1; i < rows.length; i++) {
+                let cells = rows[i].getElementsByTagName('td');
+                let match = false;
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.toLowerCase().includes(input)) {
+                        match = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = match || input === '' ? '' : 'none';
+            }
+        }
+        function submitEvent(event) {
+            event.preventDefault();
+            let name = document.getElementById('eventName').value;
+            let date = document.getElementById('eventDate').value;
+            let game = document.getElementById('eventGame').value;
+            let details = document.getElementById('eventDetails').value;
+            let table = document.getElementById('upcomingEventsTable');
+            let row = table.insertRow(-1);
+            row.innerHTML = `<td>${date}</td><td>${game}</td><td>${details}</td><td><a href="#">TBA</a></td>`;
+            document.getElementById('eventSubmissionMessage').textContent = `Event ${name} added!`;
+            document.getElementById('eventSubmissionForm').reset();
+            let events = JSON.parse(localStorage.getItem('events') || '[]');
+            events.push({ name, date, game, details, dateAdded: new Date().toLocaleDateString() });
+            localStorage.setItem('events', JSON.stringify(events));
+        }
+    </script>
+</body>
+</html>

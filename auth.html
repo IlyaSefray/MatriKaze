@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatrixKamikaze - Sign In / Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        header {
+            background: #333;
+            padding: 30px;
+            height: 150px;
+        }
+        header h1 { font-size: 3em; margin: 0; text-shadow: 2px 2px 4px #000; }
+        .content { max-width: 1000px; margin: 20px auto; padding: 20px; }
+        form { margin: 20px 0; display: flex; flex-direction: column; align-items: center; }
+        form input { margin: 10px; padding: 10px; width: 80%; max-width: 400px; border: 1px solid #555; border-radius: 5px; background: #222; color: #fff; }
+        form input[type="submit"] { background: #00ff00; color: #000; cursor: pointer; }
+        form input[type="submit"]:hover { background: #00cc00; transition: background 0.3s; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MatrixKamikaze</h1>
+    </header>
+    <div class="content">
+        <h2>Sign In / Sign Up</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+    <script>
+    document.getElementById('loginForm').onsubmit = function(e) {
+        e.preventDefault();
+        let username = document.getElementById('username').value;
+        localStorage.setItem('user', username);
+        window.location.href = 'index.html';
+    };
+    </script>
+</body>
+</html>
